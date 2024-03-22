@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using FishNet.Connection;
+using FishNet.Object;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : NetworkBehaviour
 {
     [SerializeField] private float movementSpeed;
 
@@ -14,6 +16,15 @@ public class PlayerMovement : MonoBehaviour
 
 
     // Start is called before the first frame update
+    public override void OnStartClient()
+    {
+        base.OnStartClient();
+        if(!base.IsOwner)
+        {
+            gameObject.GetComponent<PlayerMovement>().enabled = false; //makes it so that only owner of object can control it
+        }
+    }
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
